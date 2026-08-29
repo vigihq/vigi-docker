@@ -46,5 +46,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/fathermarz/vigi:latest
-            ghcr.io/fathermarz/vigi:${{ steps.fetch.outputs.version }}
+            ghcr.io/vigihq/vigi:latest
+            ghcr.io/vigihq/vigi:${{ steps.fetch.outputs.version }}

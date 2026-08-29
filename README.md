@@ -1,7 +1,7 @@
 # Vigilance Docker image
 
 ```sh
-docker run --rm -v "$PWD:/scan" ghcr.io/fathermarz/vigi:latest /scan
+docker run --rm -v "$PWD:/scan" ghcr.io/vigihq/vigi:latest /scan
 ```
 
 The image carries the free `vigi` binary on a distroless base. Activate the free
