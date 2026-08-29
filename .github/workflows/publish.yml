@@ -1,0 +1,45 @@
+name: publish
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "vigi version to package, or 'latest'."
+        default: "latest"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and verify the binary
+        id: fetch
+        run: |
+          set -euo pipefail
+          ver="${{ github.event.inputs.version }}"
+          sub="latest"
+          [ "$ver" != "latest" ] && sub="v${ver#v}"
+          curl -fsSL "https://vigihq.com/dl/$sub/vigi-linux-amd64" -o vigi
+          curl -fsSL "https://vigihq.com/dl/$sub/manifest.json"   -o manifest.json
+          real="$(python3 verify.py vigi manifest.json vigi-linux-amd64)"
+          chmod +x vigi
+          echo "version=$real" >> "$GITHUB_OUTPUT"
+          echo "verified vigi $real"
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/fathermarz/vigi:latest
+            ghcr.io/fathermarz/vigi:${{ steps.fetch.outputs.version }}
