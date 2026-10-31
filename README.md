@@ -1,5 +1,7 @@
 # Vigilance Docker image
 
+> **Vigilance 1.0 is retired.** It gets no more updates. Vigilance 2.0 installs from the join link your company gets at https://vigihq.com/watch.
+
 ```sh
 docker run --rm -v "$PWD:/scan" ghcr.io/vigihq/vigi:latest /scan
 ```
